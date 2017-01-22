@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+	<meta charset="utf-8">
+	<title>魔剤ん語</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<style>
+		.head {
+			margin: 50px 10px;
+			font-size: 2em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="head">
+			<h1>魔剤ん語</h1>
+		</div>
+		<div class="row">
+			<div class="p-4 tile col-6">
+				<h2>まじ！？</h2>
+				<textarea class="form-control" id="origin" rows="10" placeholder="入力欄"></textarea>
+			</div>
+			<div class="p-4 tile col-6">
+				<h2>まざい！？</h2>
+				<textarea class="form-control mb-2" id="result" rows="10" placeholder="変換後"></textarea>
+				<a id="share" href="https://twitter.com/intent/tweet?text=魔剤ん語" target="_blank" class="btn btn-primary">ツイート</a>
+			</div>
+		</div>
+	</div>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script>
+		var origin = document.getElementById("origin");
+		var result = document.getElementById("result");
+		var share = document.getElementById("share");
+		var twitter_url = new URL("https://twitter.com/intent/tweet");
+		var share_url = new URL(location.href);
+
+		var replace_map = {
+			"い":"あい",
+			"き":"かい",
+			"ぎ":"がい",
+			"し":"さい",
+			"じ":"ざい",
+			"ち":"たい",
+			"ぢ":"だい",
+			"に":"ない",
+			"ひ":"はい",
+			"び":"ばい",
+			"ぴ":"ぱい",
+			"み":"まい",
+			"り":"らい",
+			"イ":"アイ",
+			"キ":"カイ",
+			"ギ":"ガイ",
+			"シ":"サイ",
+			"ジ":"ザイ",
+			"チ":"タイ",
+			"ヂ":"ダイ",
+			"ニ":"ナイ",
+			"ヒ":"ハイ",
+			"ビ":"バイ",
+			"ピ":"パイ",
+			"ミ":"マイ",
+			"リ":"ライ",
+		};
+
+		var translate = function(source) {
+			return source.replace(
+				/([いきぎしじちぢにひびぴみりイキギシジチヂニヒビミリ])/g,
+				function(all, needle){
+					return replace_map[needle];
+			});
+		}
+
+		origin.addEventListener("keyup", function(e){
+			result.value = translate(e.srcElement.value);
+		}, false);
+
+		share.addEventListener("click", function(e){
+			share_url.searchParams.set("o", origin.value);
+			twitter_url.searchParams.set("text", result.value + " - 魔剤ん語");
+			twitter_url.searchParams.set("url", share_url.href);
+			e.srcElement.href=twitter_url.href;
+		});
+
+		var origin_from_query = new URL(location.href).searchParams.get("o");
+		if (origin_from_query != "") {
+			origin.value = origin_from_query;
+			result.value = translate(origin_from_query);
+		}
+	</script>
+</body>
+</html>
